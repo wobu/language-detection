@@ -38,7 +38,7 @@ public class DetectorFactory {
     public ArrayList<String> langlist;
     public Long seed = null;
 
-    DetectorFactory() {
+    public DetectorFactory() {
         wordLangProbMap = new HashMap<String, double[]>();
         langlist = new ArrayList<String>();
     }
