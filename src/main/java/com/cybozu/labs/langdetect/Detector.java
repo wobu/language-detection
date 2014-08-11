@@ -58,7 +58,7 @@ public class Detector {
     private static final double ALPHA_WIDTH = 0.05;
 
     private static final int ITERATION_LIMIT = 1000;
-    private static final double PROB_THRESHOLD = 0.1;
+    private static final double PROB_THRESHOLD_DEFAULT = 0.1;
     private static final double CONV_THRESHOLD = 0.99999;
     private static final int BASE_FREQ = 10000;
     private static final String UNKNOWN_LANG = "unknown";
@@ -78,6 +78,7 @@ public class Detector {
     private double[] priorMap = null;
     private boolean verbose = false;
     private Long seed = null;
+    private double probabilityThreshold = PROB_THRESHOLD_DEFAULT;
 
     /**
      * Constructor.
@@ -105,6 +106,15 @@ public class Detector {
      */
     public void setAlpha(double alpha) {
         this.alpha = alpha;
+    }
+
+    /**
+     * Set a threshold for probability.
+     * Every detected language below this point will be ignored and not returned.
+     * @param probabilityThreshold the probability threshold.
+     */
+    public void setProbabilityThreshold(double probabilityThreshold) {
+        this.probabilityThreshold = probabilityThreshold;
     }
 
     /**
@@ -340,7 +350,7 @@ public class Detector {
         ArrayList<Language> list = new ArrayList<Language>();
         for(int j=0;j<prob.length;++j) {
             double p = prob[j];
-            if (p > PROB_THRESHOLD) {
+            if (p >= probabilityThreshold) {
                 for (int i = 0; i <= list.size(); ++i) {
                     if (i == list.size() || list.get(i).prob < p) {
                         list.add(i, new Language(langlist.get(j), p));
