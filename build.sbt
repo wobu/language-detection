@@ -2,7 +2,7 @@ name := "language-detection"
 
 organization := "com.cybozu.labs"
 
-version := "0.99"
+version := "0.1-SNAPSHOT"
 
 scalaVersion := "2.11.2"
 
@@ -17,3 +17,8 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test"
 libraryDependencies += "com.novocode" % "junit-interface" % "0.10" % "test"
 
 libraryDependencies += "net.arnx" % "jsonic" % "1.3.0"
+
+
+publishMavenStyle := true
+
+crossPaths := false
