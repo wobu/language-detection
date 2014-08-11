@@ -1,8 +1,8 @@
+releaseSettings
+
 name := "language-detection"
 
 organization := "com.cybozu.labs"
-
-version := "0.1-SNAPSHOT"
 
 scalaVersion := "2.11.2"
 
