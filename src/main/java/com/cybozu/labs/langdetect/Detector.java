@@ -1,5 +1,6 @@
 package com.cybozu.labs.langdetect;
 
+import com.cybozu.labs.langdetect.profiles.RegexMatcher;
 import com.cybozu.labs.langdetect.util.NGram;
 
 import java.io.IOException;
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 /**
  * {@link Detector} class is to detect language from specified text.
@@ -61,8 +61,6 @@ public class Detector {
     private double convergenceThreshold = 0.99999;
     private static final int BASE_FREQ = 10000;
     private static final String UNKNOWN_LANG = "unknown";
-    private static final Pattern URL_REGEX = Pattern.compile("https?://[-_.?&~;+=/#0-9A-Za-z]{1,2076}");
-    private static final Pattern MAIL_REGEX = Pattern.compile("[-_.0-9A-Za-z]{1,64}@[-_0-9A-Za-z]{1,255}[-_.0-9A-Za-z]{1,255}");
     private final HashMap<String, double[]> wordLangProbMap;
     private final ArrayList<String> langlist;
     private StringBuffer text;
@@ -225,8 +223,8 @@ public class Detector {
      * @param text the target text to append
      */
     public void append(String text) {
-        text = URL_REGEX.matcher(text).replaceAll(" ");
-        text = MAIL_REGEX.matcher(text).replaceAll(" ");
+        text = RegexMatcher.url().replaceAllIn(text, " ");
+        text = RegexMatcher.email().replaceAllIn(text, " ");
         text = NGram.normalize_vi(text);
         char pre = 0;
         for (int i = 0; i < text.length() && i < max_text_length; ++i) {
