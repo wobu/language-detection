@@ -54,21 +54,22 @@ import java.util.Random;
  * @see DetectorFactory
  */
 public class Detector {
-    private double alpha = 0.5;
     private static final double ALPHA_WIDTH = 0.05;
     private static final int ITERATION_LIMIT = 1000;
-    private double probabilityThreshold = 0.1;
-    private double convergenceThreshold = 0.99999;
     private static final int BASE_FREQ = 10000;
     private static final String UNKNOWN_LANG = "unknown";
     private final HashMap<String, double[]> wordLangProbMap;
     private final ArrayList<String> langlist;
+    private double alpha = 0.5;
+    private double probabilityThreshold = 0.1;
+    private double convergenceThreshold = 0.99999;
     private StringBuffer text;
     private double[] langprob = null;
     private int n_trial = 7;
     private int max_text_length = 10000;
     private boolean verbose = false;
     private Long seed = null;
+    private double latinTextFilterQuota = 0.33;
 
     /**
      * Constructor.
@@ -118,6 +119,15 @@ public class Detector {
             }
         }
         return buf.toString();
+    }
+
+    /**
+     * Quota of latinText to complete text corpus to be filtered out when falling below.
+     * Default value is 0.33 = 33%
+     * @param latinTextFilterQuota the quota.
+     */
+    public void setLatinTextFilterQuota(double latinTextFilterQuota) {
+        this.latinTextFilterQuota = latinTextFilterQuota;
     }
 
     /**
@@ -221,7 +231,7 @@ public class Detector {
                 ++nonLatinCount;
             }
         }
-        if (latinCount * 2 < nonLatinCount) {
+        if ((latinCount * 100d / (latinCount + nonLatinCount)) / 100 < latinTextFilterQuota) {
             StringBuffer textWithoutLatin = new StringBuffer();
             for (int i = 0; i < text.length(); ++i) {
                 char c = text.charAt(i);
