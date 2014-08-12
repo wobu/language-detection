@@ -21,7 +21,7 @@ import java.util.Random;
  * {@link #getProbabilities()} methods returns a list of multiple languages and their probabilities.
  * <p>
  * The detector has some parameters for language detection.
- * See {@link #setAlpha(double)}, {@link #setMaxTextLength(int)} and {@link #setPriorMap(HashMap)}.
+ * See {@link #setAlpha(double)}, {@link #setMaxTextLength(int)}.
  * <p>
  * <pre>
  * import java.util.ArrayList;
@@ -67,7 +67,6 @@ public class Detector {
     private double[] langprob = null;
     private int n_trial = 7;
     private int max_text_length = 10000;
-    private double[] priorMap = null;
     private boolean verbose = false;
     private Long seed = null;
 
@@ -158,34 +157,6 @@ public class Detector {
      */
     public void setProbabilityThreshold(double probabilityThreshold) {
         this.probabilityThreshold = probabilityThreshold;
-    }
-
-    /**
-     * Set prior information about language probabilities.
-     *
-     * @param priorMap the priorMap to set
-     * @throws LangDetectException
-     */
-    public void setPriorMap(HashMap<String, Double> priorMap) throws LangDetectException {
-        this.priorMap = new double[langlist.size()];
-        double sump = 0;
-        for (int i = 0; i < this.priorMap.length; ++i) {
-            String lang = langlist.get(i);
-            if (priorMap.containsKey(lang)) {
-                double p = priorMap.get(lang);
-                if (p < 0) {
-                    throw new LangDetectException(ErrorCode.InitParamError, "Prior probability must be non-negative.");
-                }
-                this.priorMap[i] = p;
-                sump += p;
-            }
-        }
-        if (sump <= 0) {
-            throw new LangDetectException(ErrorCode.InitParamError, "More one of prior probability must be non-zero.");
-        }
-        for (int i = 0; i < this.priorMap.length; ++i) {
-            this.priorMap[i] /= sump;
-        }
     }
 
     /**
@@ -345,11 +316,11 @@ public class Detector {
      */
     private double[] initProbability() {
         double[] prob = new double[langlist.size()];
-        if (priorMap != null) {
-            for (int i = 0; i < prob.length; ++i) prob[i] = priorMap[i];
-        } else {
-            for (int i = 0; i < prob.length; ++i) prob[i] = 1.0 / langlist.size();
+
+        for (int i = 0; i < prob.length; ++i) {
+            prob[i] = 1.0 / langlist.size();
         }
+
         return prob;
     }
 
