@@ -8,10 +8,7 @@ import net.arnx.jsonic.JSONException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Language Detector Factory Class
@@ -98,7 +95,7 @@ public class DetectorFactory {
      * @throws LangDetectException Can't open profiles(error code = {@link ErrorCode#FileLoadError})
      *                             or profile's format is wrong (error code = {@link ErrorCode#FormatError})
      */
-    public void loadProfile(List<String> json_profiles) throws LangDetectException {
+    public void loadProfile(Collection<String> json_profiles) throws LangDetectException {
         int index = 0;
         int langsize = json_profiles.size();
         if (langsize < 2)
@@ -116,11 +113,11 @@ public class DetectorFactory {
     }
 
     public void loadBundledProfiles() throws LangDetectException {
-        loadProfile(new ArrayList<>(LanguageProfile.profiles().values()));
+        loadProfile(LanguageProfile.profiles().values());
     }
 
     public void loadBundledShortTextProfiles() throws LangDetectException {
-        loadProfile(new ArrayList<>(LanguageProfile.shortTextProfiles().values()));
+        loadProfile(LanguageProfile.shortTextProfiles().values());
     }
 
     /**
