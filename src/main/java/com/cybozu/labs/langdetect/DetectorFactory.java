@@ -116,11 +116,11 @@ public class DetectorFactory {
     }
 
     public void loadBundledProfiles() throws LangDetectException {
-        loadProfile(LanguageProfile.profiles());
+        loadProfile(new ArrayList<>(LanguageProfile.profiles().values()));
     }
 
     public void loadBundledShortTextProfiles() throws LangDetectException {
-        loadProfile(LanguageProfile.shortTextProfiles());
+        loadProfile(new ArrayList<>(LanguageProfile.shortTextProfiles().values()));
     }
 
     /**

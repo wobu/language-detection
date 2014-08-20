@@ -8,11 +8,11 @@ object LanguageProfile {
 
   import scala.collection.JavaConversions._
 
-  lazy val profiles : java.util.List[String] = {
-    seqAsJavaList(languages.map(lang => Source.fromInputStream(LanguageProfile.getClass.getResourceAsStream(lang))(Codec.UTF8).mkString))
+  lazy val profiles : java.util.Map[String, String] = {
+    mapAsJavaMap(languages.map(lang => lang -> Source.fromInputStream(LanguageProfile.getClass.getResourceAsStream(lang))(Codec.UTF8).mkString).toMap)
   }
 
-  lazy val shortTextProfiles : java.util.List[String] = {
-    seqAsJavaList(shortTextLanguages.map(lang => Source.fromInputStream(LanguageProfile.getClass.getResourceAsStream("short/" + lang))(Codec.UTF8).mkString))
+  lazy val shortTextProfiles : java.util.Map[String, String] = {
+    mapAsJavaMap(shortTextLanguages.map(lang => lang -> Source.fromInputStream(LanguageProfile.getClass.getResourceAsStream("short/" + lang))(Codec.UTF8).mkString).toMap)
   }
 }
